@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.graylog2</groupId>
-        <artifactId>oss-assembly</artifactId>
+        <groupId>org.graylog</groupId>
+        <artifactId>graylog-project</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
