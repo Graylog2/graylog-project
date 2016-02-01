@@ -1,6 +1,6 @@
 # Graylog Project Helper
 
-Clone graylog2-server and graylog-plugin-anonymous-usage-statistics next to this repo and import the graylog-project Maven project into your favorite IDE, we recommend IntelliJ IDEA.
+Run the `scripts/bootstrap` script and import the graylog-project Maven project into your favorite IDE, we recommend IntelliJ IDEA.
 
 Then create a server run configuration, but use the classpath of the module "runner".
 

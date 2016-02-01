@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+log() {
+	local msg="$1"
+
+	echo "[BOOTSTRAP]==> $msg"
+}
+
+root=$(dirname $(dirname $0))
+pom="$root/pom.xml"
+repos=$(grep '<!-- GIT ' $pom | sed -re 's,.*GIT ([^ ]+).*,\1,g')
+
+for repo in $repos; do
+	dir=$(basename $repo .git)
+
+	if [ -d "$root/../$dir" ]; then
+		log "Updating repository: $repo"
+		(cd "$root/../$dir" && git pull)
+	else
+		log "Cloning repository: $repo"
+		git clone $repo "$root/../$dir"
+	fi
+done
+
+exit 0
