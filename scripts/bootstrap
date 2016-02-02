@@ -25,4 +25,7 @@ for repo in $repos; do
 	fi
 done
 
+log "Creating build-pom.xml"
+sed -re "s,<module>\.\./,<module>$deproot/,g" pom.xml > build-pom.xml
+
 exit 0
