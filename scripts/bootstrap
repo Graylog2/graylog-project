@@ -17,7 +17,7 @@ for repo in $repos; do
 
 	if [ -d "$root/../$dir" ]; then
 		log "Updating repository: $repo"
-		(cd "$root/../$dir" && git pull)
+		(cd "$root/../$dir" && git pull origin master)
 	else
 		log "Cloning repository: $repo"
 		git clone $repo "$root/../$dir"
