@@ -9,18 +9,19 @@ log() {
 }
 
 root=$(dirname $(dirname $0))
+deproot=${1:-".."}
 pom="$root/pom.xml"
 repos=$(grep '<!-- GIT ' $pom | sed -re 's,.*GIT ([^ ]+).*,\1,g')
 
 for repo in $repos; do
 	dir=$(basename $repo .git)
 
-	if [ -d "$root/../$dir" ]; then
+	if [ -d "$root/$deproot/$dir" ]; then
 		log "Updating repository: $repo"
-		(cd "$root/../$dir" && git pull origin master)
+		(cd "$root/$deproot/$dir" && git pull origin master)
 	else
 		log "Cloning repository: $repo"
-		git clone $repo "$root/../$dir"
+		git clone $repo "$root/$deproot/$dir"
 	fi
 done
 
