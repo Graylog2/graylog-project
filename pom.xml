@@ -11,9 +11,9 @@
 
     <modules>
         <module>runner</module>
-        <!-- GIT git@github.com:Graylog2/graylog2-server.git -->
+        <!-- GIT git@github.com:Graylog2/graylog2-server.git= -->
         <module>../graylog2-server</module>
-        <!-- GIT git@github.com:Graylog2/graylog-plugin-anonymous-usage-statistics.git -->
+        <!-- GIT git@github.com:Graylog2/graylog-plugin-anonymous-usage-statistics.git=master -->
         <module>../graylog-plugin-anonymous-usage-statistics</module>
     </modules>
     <properties>
