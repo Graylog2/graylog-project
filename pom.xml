@@ -9,6 +9,13 @@
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <scm>
+        <connection>scm:git:git@github.com:Graylog2/graylog-project.git</connection>
+        <developerConnection>scm:git:git@github.com:Graylog2/graylog-project.git</developerConnection>
+        <url>https://github.com/Graylog2/graylog-project</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <modules>
         <module>runner</module>
         <!-- GIT git@github.com:Graylog2/graylog2-server.git=master -->
@@ -45,8 +52,9 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <mavenExecutorId>forked-path</mavenExecutorId>
                     <tagNameFormat>@{project.version}</tagNameFormat>
-                    <preparationGoals>clean</preparationGoals>
-                    <goals>package</goals>
+                    <preparationGoals>clean test</preparationGoals>
+                    <goals>package assembly:single</goals>
+                    <releaseProfiles>release</releaseProfiles>
                 </configuration>
             </plugin>
             <plugin>
