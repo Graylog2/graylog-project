@@ -19,14 +19,16 @@
     <modules>
         <module>runner</module>
         <!-- GIT git@github.com:Graylog2/graylog2-server.git=master -->
-        <module>../graylog2-server</module>
+        <module>${module.dependencies.path}/graylog2-server</module>
         <!-- GIT git@github.com:Graylog2/graylog-plugin-anonymous-usage-statistics.git=master -->
-        <module>../graylog-plugin-anonymous-usage-statistics</module>
+        <module>${module.dependencies.path}/graylog-plugin-anonymous-usage-statistics</module>
     </modules>
+
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <!-- to work around filtering bug, which makes maven.build.timestamp inaccessible -->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
+        <module.dependencies.path>..</module.dependencies.path>
     </properties>
 
     <dependencies>

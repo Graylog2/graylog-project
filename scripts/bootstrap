@@ -36,7 +36,4 @@ for repo_and_tag in $repos; do
 
 done
 
-log "Creating build-pom.xml"
-sed -re "s,<module>\.\./,<module>$deproot/,g" pom.xml > build-pom.xml
-
 exit 0
