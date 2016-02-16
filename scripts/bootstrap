@@ -11,7 +11,7 @@ log() {
 root=$(dirname $(dirname $0))
 deproot=${1:-".."}
 pom="$root/pom.xml"
-repos=$(grep '<!-- GIT ' $pom | sed -re 's,.*GIT ([^ ]+).*,\1,g')
+repos=$(grep '<!-- GIT ' $pom | sed -e 's/.*GIT \([^[:space:]]\{1,\}\).*/\1/g')
 
 for repo_and_tag in $repos; do
 	repo=$(echo $repo_and_tag | cut -d '=' -f 1)
