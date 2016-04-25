@@ -15,8 +15,6 @@ if [ -d $pluginname ]; then
   err "There is already a plugin with that name. Cowardly refusing to overwrite it."
 fi
 
-buildConfigFilename=${pluginname}/build.config.js
-
 mvn archetype:generate -DarchetypeGroupId=org.graylog -DarchetypeArtifactId=graylog-plugin-archetype -DartifactId=$pluginname
 
-sed 's,\(../graylog2-server/graylog2-web-interface\),../\1/,' < ${buildConfigFilename}.sample > ${buildConfigFilename}
+echo ${pluginname}/ >> ${prefix}/.gitignore
