@@ -8,6 +8,11 @@ check_for_server_dir
 
 pushd 2> /dev/null
 
+if [ ! -d ${webIfDir}/node ] || [ ! -d ${webIfDir}/node_modules ]; then
+  cd ${serverDir}/graylog2-server
+  mvn generate-resources
+fi
+
 cd $webIfDir
 PATH=$PATH:node npm start
 
