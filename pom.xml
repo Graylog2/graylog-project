@@ -18,9 +18,9 @@
 
     <modules>
         <module>runner</module>
-        <!-- GIT git@github.com:Graylog2/graylog2-server.git=master -->
+        <!-- GIT https://github.com/Graylog2/graylog2-server.git=master -->
         <module>${module.dependencies.path}/graylog2-server</module>
-        <!-- GIT git@github.com:Graylog2/graylog-plugin-anonymous-usage-statistics.git=master -->
+        <!-- GIT https://github.com/Graylog2/graylog-plugin-anonymous-usage-statistics.git=master -->
         <module>${module.dependencies.path}/graylog-plugin-anonymous-usage-statistics</module>
     </modules>
 
