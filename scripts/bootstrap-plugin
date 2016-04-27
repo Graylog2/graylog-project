@@ -7,7 +7,7 @@ prefix=$(dirname $0)
 check_for_server_dir
 
 pluginname=graylog-plugin-$1
-if [ -z $pluginname ]; then
+if [ -z $1 ]; then
   err "Syntax: $0 <plugin name>"
 fi
 
@@ -21,3 +21,8 @@ buildConf=${modulesDir}/${pluginname}/build.config.js
 cp ${buildConf}.sample ${buildConf}
 
 grep -q ${pluginname} ${gitignore} || printf "\n%s\n" "${pluginname}" >> ${gitignore}
+
+pushd 2> /dev/null
+cd $pluginname
+mvn generate-resources
+popd 2> /dev/null
