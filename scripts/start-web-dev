@@ -1,0 +1,14 @@
+#!/bin/sh
+
+prefix=$(dirname $0)
+
+. ${prefix}/includes
+
+check_for_server_dir
+
+pushd 2> /dev/null
+
+cd $webIfDir
+PATH=$PATH:node npm start
+
+popd 2> /dev/null

@@ -1,0 +1,15 @@
+err() {
+  echo $1
+  exit -1
+}
+
+prefix=$(dirname $0)
+modulesPrefix=..
+serverDir=../graylog2-server
+webIfDir=${serverDir}/graylog2-web-interface
+
+check_for_server_dir() {
+  if [ ! -d $serverDir ]; then
+    err "There is no directory for the server checkout ($serverDir). Please run $prefix/bootstrap first."
+  fi
+}

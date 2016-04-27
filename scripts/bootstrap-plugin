@@ -1,16 +1,10 @@
 #!/bin/sh
 
-err() {
-  echo $1
-  exit -1
-}
-
 prefix=$(dirname $0)
-serverDir=../graylog2-server
 
-if [ ! -d $serverDir ]; then
-  err "There is no directory for the server checkout ($serverDir).Please run $prefix/bootstrap first."
-fi
+. ${prefix}/includes
+
+check_for_server_dir
 
 pluginname=$1
 if [ -z $pluginname ]; then

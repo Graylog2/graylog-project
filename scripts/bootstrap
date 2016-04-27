@@ -8,8 +8,11 @@ log() {
 	echo "[BOOTSTRAP]==> $msg"
 }
 
+prefix=$(dirname $0)
+. ${prefix}/includes
+
 root=$(dirname $(dirname $0))
-deproot=${1:-".."}
+deproot=${1:-"${modulesPrefix}"}
 pom="$root/pom.xml"
 repos=$(grep '<!-- GIT ' $pom | sed -e 's/.*GIT \([^[:space:]]\{1,\}\).*/\1/g')
 
