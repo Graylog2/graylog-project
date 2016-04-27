@@ -4,6 +4,7 @@ err() {
 }
 
 prefix=$(dirname $0)
+projectRoot=${prefix}/..
 modulesPrefix=.
 serverDir=${modulesPrefix}/graylog2-server
 webIfDir=${serverDir}/graylog2-web-interface

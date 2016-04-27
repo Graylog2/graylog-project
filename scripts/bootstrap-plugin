@@ -20,7 +20,7 @@ mvn archetype:generate -DarchetypeGroupId=org.graylog -DarchetypeArtifactId=gray
 buildConf=${modulesPrefix}/${pluginname}/build.config.js
 cp ${buildConf}.sample ${buildConf}
 
-gitignore=${prefix}/.gitignore
+gitignore=${projectRoot}/.gitignore
 grep -q ${pluginname} ${gitignore} || printf "\n%s\n" "${pluginname}" >> ${gitignore}
 
 pushd 2> /dev/null
