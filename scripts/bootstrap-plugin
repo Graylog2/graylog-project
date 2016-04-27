@@ -17,7 +17,7 @@ fi
 
 mvn archetype:generate -DarchetypeGroupId=org.graylog -DarchetypeArtifactId=graylog-plugin-archetype -DartifactId=$pluginname
 
-buildConf=${modulesDir}/${pluginname}/build.config.js
+buildConf=${modulesPrefix}/${pluginname}/build.config.js
 cp ${buildConf}.sample ${buildConf}
 
 grep -q ${pluginname} ${gitignore} || printf "\n%s\n" "${pluginname}" >> ${gitignore}
