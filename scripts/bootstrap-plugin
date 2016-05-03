@@ -6,8 +6,8 @@ prefix=$(dirname $0)
 
 check_for_server_dir
 
-pluginname=$1
-if [ -z $pluginname ]; then
+pluginname=graylog-plugin-$1
+if [ -z $1 ]; then
   err "Syntax: $0 <plugin name>"
 fi
 
@@ -15,8 +15,15 @@ if [ -d $pluginname ]; then
   err "There is already a plugin with that name. Cowardly refusing to overwrite it."
 fi
 
-buildConfigFilename=${pluginname}/build.config.js
-
 mvn archetype:generate -DarchetypeGroupId=org.graylog -DarchetypeArtifactId=graylog-plugin-archetype -DartifactId=$pluginname
 
-sed 's,\(../graylog2-server/graylog2-web-interface\),../\1/,' < ${buildConfigFilename}.sample > ${buildConfigFilename}
+buildConf=${modulesPrefix}/${pluginname}/build.config.js
+cp ${buildConf}.sample ${buildConf}
+
+gitignore=${projectRoot}/.gitignore
+grep -q ${pluginname} ${gitignore} || printf "\n%s\n" "${pluginname}" >> ${gitignore}
+
+pushd 2> /dev/null
+cd $pluginname
+mvn generate-resources
+popd 2> /dev/null
