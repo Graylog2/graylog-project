@@ -6,7 +6,7 @@
 
     <groupId>org.graylog</groupId>
     <artifactId>graylog-project</artifactId>
-    <version>2.1.0-alpha.3-SNAPSHOT</version>
+    <version>2.1.0-beta.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -29,7 +29,7 @@
         <!-- to work around filtering bug, which makes maven.build.timestamp inaccessible -->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
         <module.dependencies.path>.</module.dependencies.path>
-        <plugin.versions>1.1.0-alpha.3-SNAPSHOT</plugin.versions>
+        <plugin.versions>1.1.0-beta.5-SNAPSHOT</plugin.versions>
     </properties>
 
     <dependencies>
