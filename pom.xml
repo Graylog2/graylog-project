@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.graylog</groupId>
@@ -22,7 +20,8 @@
         <module>${module.dependencies.path}/graylog2-server</module>
         <!-- GIT https://github.com/Graylog2/graylog-plugin-anonymous-usage-statistics.git=master -->
         <module>${module.dependencies.path}/graylog-plugin-anonymous-usage-statistics</module>
-    </modules>
+		<module>graylog-plugin-mongo-admin</module>
+  </modules>
 
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
@@ -42,6 +41,11 @@
             <groupId>org.graylog.plugins</groupId>
             <artifactId>usage-statistics</artifactId>
             <version>${project.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>org.graylog.plugins</groupId>
+            <artifactId>graylog-plugin-mongo-admin</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -92,4 +96,3 @@
         </profile>
     </profiles>
 </project>
-

@@ -9,4 +9,6 @@ This allows the listed plugins to be on the same classpath and thus loaded direc
 # Creating plugins
 
 If you want to start developing a new plugin, use `scripts/bootstrap-plugin <plugin name>` to create one. The plugin name is also the directory/module name you will find the plugin after the script has been executed properly.
+For developing  your plugin inside a IDE is necessary to change the plugins parent pom like to 'org.sonatype.oss:oss-parent' and add as dependency the plugin to parent pom of the project and rebuild
+
 
