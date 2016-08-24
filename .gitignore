@@ -71,3 +71,9 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
+
+graylog2-server
+
+graylog-plugin-anonymous-usage-statistics
+
+graylog-plugin-mongo-admin
