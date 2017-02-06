@@ -24,6 +24,5 @@ gitignore=${projectRoot}/.gitignore
 grep -q ${pluginname} ${gitignore} || printf "\n%s\n" "${pluginname}" >> ${gitignore}
 
 pushd 2> /dev/null
-cd $pluginname
 mvn generate-resources
 popd 2> /dev/null
