@@ -93,10 +93,56 @@ Now you can import the `graylog-project` folder into your IDE of choice.
 At Graylog we are using [IntelliJ IDEA](https://www.jetbrains.com/idea/) so we
 are using that for the following example.
 
-TBD
+After importing the project into your IDE, create a server run configuration:
 
-Then create a server run configuration, but use the classpath of the module "runner".
+![IntelliJ Run Config](/docs/images/intellij-run-config.png)
+
+- Make sure to use the **runner** module for the *Use classpath of module* option
+- Use the **graylog2-server** directory as *Working directory*
+- In *Program arguments* use `server -f graylog.conf --local`
+  (`--local` to avoid sending usage stats and running version checks)
 
 This allows the listed plugins to be on the same classpath and thus loaded
 directly without having to go through mvn package and symlinking/copying into
 Graylog's plugins folder.
+
+### Server Configuration File
+
+Create a `graylog.conf` file inside the `graylog2-server` directory based on
+the `misc/graylog.conf` example configuration.
+
+### Initial Build
+
+Before you can run the server from the IDE, you have to run an initial build
+to create some assets.
+
+```
+$ mvn compile
+```
+
+This will build the backend and frontend parts.
+
+## Usage
+
+### Elasticsearch & MongoDB
+
+Before you start the server, make sure you have an Elasticsearch and MongoDB
+service running and the `graylog.conf` contains the correct connection
+details for both.
+
+### Server Start
+
+Now you should be able to start the server from your IDE by using the
+run configuration that you created before.
+
+### Web Interface Start
+
+For development we are using the webpack-dev-server. You can start it by
+using the following command inside the `graylog2-server/graylog2-web-interface`
+directory.
+
+```
+$ ./node/npm run start
+```
+
+The web interface is now reachable via [http://localhost:8080/](http://localhost:8080/).
