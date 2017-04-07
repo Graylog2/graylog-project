@@ -95,7 +95,7 @@ are using that for the following example.
 
 After importing the project into your IDE, create a server run configuration:
 
-![IntelliJ Run Config](/docs/images/intellij-run-config.png)
+[![IntelliJ Run Config](/docs/images/intellij-run-config.png)](https://raw.githubusercontent.com/Graylog2/graylog-project/master/docs/images/intellij-run-config.png)
 
 - Make sure to use the **runner** module for the *Use classpath of module* option
 - Use the **graylog2-server** directory as *Working directory*
