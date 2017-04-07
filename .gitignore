@@ -71,3 +71,11 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
+# Generated XML files
+/pom.xml
+/runner/pom.xml
+/src/main/assembly/server-tarball.xml
+
+# graylog-project CLI files
+/.graylog-project-manifest-state
+/.graylog-project-cli.yaml

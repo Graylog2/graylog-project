@@ -6,7 +6,7 @@
 
     <groupId>org.graylog</groupId>
     <artifactId>graylog-project</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>{{ .Server.Version }}</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -18,48 +18,41 @@
 
     <modules>
         <module>runner</module>
-        <!-- GIT https://github.com/Graylog2/graylog2-server.git=master -->
-        <module>${module.dependencies.path}/graylog2-server</module>
-        <!-- GIT https://github.com/Graylog2/graylog-plugin-anonymous-usage-statistics.git=master -->
-        <module>${module.dependencies.path}/graylog-plugin-anonymous-usage-statistics</module>
+
+        {{ range $module := .Modules -}}
+        <module>{{ .RelativePath }}</module>
+        {{ end }}
     </modules>
 
     <properties>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.useIncrementalCompilation>false</maven.compiler.useIncrementalCompilation>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <maven.source.skip>true</maven.source.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.site.skip>true</maven.site.skip>
+
         <!-- to work around filtering bug, which makes maven.build.timestamp inaccessible -->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
-        <module.dependencies.path>.</module.dependencies.path>
-        <plugin.versions>1.2.0-SNAPSHOT</plugin.versions>
     </properties>
 
     <dependencies>
+        {{ range $dependency := .Dependencies -}}
         <dependency>
-            <groupId>org.graylog2</groupId>
-            <artifactId>graylog2-server</artifactId>
-            <version>${project.version}</version>
+            <groupId>{{ $dependency.GroupId }}</groupId>
+            <artifactId>{{ $dependency.ArtifactId }}</artifactId>
+            <version>{{ $dependency.Version }}</version>
         </dependency>
-        <dependency>
-            <groupId>org.graylog.plugins</groupId>
-            <artifactId>usage-statistics</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        {{ end }}
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <mavenExecutorId>forked-path</mavenExecutorId>
-                    <tagNameFormat>@{project.version}</tagNameFormat>
-                    <preparationGoals>clean test</preparationGoals>
-                    <goals>package assembly:single</goals>
-                    <releaseProfiles>release</releaseProfiles>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
@@ -72,6 +65,21 @@
                         <descriptor>src/main/assembly/server-tarball.xml</descriptor>
                     </descriptors>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.11</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

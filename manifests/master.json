@@ -1,0 +1,52 @@
+{
+  "modules": [
+    {
+      "repository": "git@github.com:Graylog2/graylog2-server.git",
+      "revision": "master",
+      "server": true,
+      "submodules": [
+        {
+          "path": "graylog2-server"
+        },
+        {
+          "path": "graylog2-web-interface"
+        }
+      ]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-anonymous-usage-statistics.git",
+      "revision": "master",
+      "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-map-widget.git",
+      "revision": "master",
+      "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-pipeline-processor.git",
+      "revision": "master",
+      "submodules" : [
+        {
+          "path": "plugin",
+          "assembly": true
+        }
+      ]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
+      "revision": "master",
+      "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-enterprise-integration.git",
+      "revision": "master",
+      "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-beats.git",
+      "revision": "master",
+      "assembly": true
+    }
+  ]
+}

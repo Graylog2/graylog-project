@@ -20,9 +20,11 @@
         </moduleSet>
 
         <moduleSet>
-            <includeSubModules>false</includeSubModules>
+            <includeSubModules>true</includeSubModules>
             <includes>
-                <include>org.graylog.plugins:usage-statistics</include>
+                {{ range $assembly := .Assemblies -}}
+                <include>{{ $assembly }}</include>
+                {{ end -}}
             </includes>
             <binaries>
                 <includeDependencies>false</includeDependencies>
