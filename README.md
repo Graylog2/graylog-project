@@ -34,7 +34,10 @@ Example:
 ```
 $ mkdir -p $HOME/bin
 $ cp graylog-project.linux $HOME/bin/graylog-project
+$ chmod +x $HOME/bin/graylog-project
 ```
+
+If you use the example above, please make sure your `$HOME/bin` is in your PATH!
 
 ### Bootstrap
 
