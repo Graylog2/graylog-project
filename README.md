@@ -89,6 +89,20 @@ Generating src/main/assembly/server-tarball.xml file from template src/main/asse
 Writing manifest state to .graylog-project-manifest-state
 ```
 
+### Initial Build
+
+Before you can run the server from the IDE, you have to run an initial build
+to create some assets.
+
+```
+$ cd graylog-project-repos/graylog2-server
+$ mvn compile
+$ cd ../graylog-plugin-pipeline-processor
+$ mvn compile
+```
+
+This will build the backend and frontend parts.
+
 ### IDE Import
 
 Now you can import the `graylog-project` folder into your IDE of choice.
@@ -109,21 +123,12 @@ This allows the listed plugins to be on the same classpath and thus loaded
 directly without having to go through mvn package and symlinking/copying into
 Graylog's plugins folder.
 
+You might notice errors with imports for the `RuleLangParser`. However, the build will still succeed.
+
 ### Server Configuration File
 
 Create a `graylog.conf` file inside the `graylog2-server` directory based on
 the `misc/graylog.conf` example configuration.
-
-### Initial Build
-
-Before you can run the server from the IDE, you have to run an initial build
-to create some assets.
-
-```
-$ mvn compile
-```
-
-This will build the backend and frontend parts.
 
 ## Usage
 
