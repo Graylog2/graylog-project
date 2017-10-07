@@ -47,6 +47,26 @@
       "repository": "git@github.com:Graylog2/graylog-plugin-beats.git",
       "revision": "master",
       "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-aws.git",
+      "revision": "master",
+      "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-threatintel.git",
+      "revision": "master",
+      "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-netflow.git",
+      "revision": "master",
+      "assembly": true
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-cef.git",
+      "revision": "master",
+      "assembly": true
     }
   ]
 }
