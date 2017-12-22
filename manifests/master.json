@@ -14,11 +14,6 @@
       ]
     },
     {
-      "repository": "git@github.com:Graylog2/graylog-plugin-anonymous-usage-statistics.git",
-      "revision": "master",
-      "assembly": true
-    },
-    {
       "repository": "git@github.com:Graylog2/graylog-plugin-map-widget.git",
       "revision": "master",
       "assembly": true
