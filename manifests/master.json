@@ -19,16 +19,6 @@
       "assembly": true
     },
     {
-      "repository": "git@github.com:Graylog2/graylog-plugin-pipeline-processor.git",
-      "revision": "master",
-      "submodules" : [
-        {
-          "path": "plugin",
-          "assembly": true
-        }
-      ]
-    },
-    {
       "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
       "revision": "master",
       "assembly": true
