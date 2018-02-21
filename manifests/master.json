@@ -14,22 +14,7 @@
       ]
     },
     {
-      "repository": "git@github.com:Graylog2/graylog-plugin-map-widget.git",
-      "revision": "master",
-      "assembly": true
-    },
-    {
       "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
-      "revision": "master",
-      "assembly": true
-    },
-    {
-      "repository": "git@github.com:Graylog2/graylog-plugin-enterprise-integration.git",
-      "revision": "master",
-      "assembly": true
-    },
-    {
-      "repository": "git@github.com:Graylog2/graylog-plugin-beats.git",
       "revision": "master",
       "assembly": true
     },
@@ -40,11 +25,6 @@
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-threatintel.git",
-      "revision": "master",
-      "assembly": true
-    },
-    {
-      "repository": "git@github.com:Graylog2/graylog-plugin-cef.git",
       "revision": "master",
       "assembly": true
     }
