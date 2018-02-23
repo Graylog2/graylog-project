@@ -19,18 +19,24 @@
             </binaries>
         </moduleSet>
 
+        {{ range $assembly := index .Assemblies "graylog" }}
         <moduleSet>
             <includeSubModules>true</includeSubModules>
             <includes>
-                {{ range $assembly := .Assemblies -}}
                 <include>{{ $assembly }}</include>
-                {{ end -}}
             </includes>
             <binaries>
+            {{ if $assembly.Attachment }}
+                <attachmentClassifier>{{ $assembly.Attachment }}</attachmentClassifier>
+                <includeDependencies>false</includeDependencies>
+                <unpack>true</unpack>
+            {{ else }}
                 <includeDependencies>false</includeDependencies>
                 <outputDirectory>plugin</outputDirectory>
                 <unpack>false</unpack>
+            {{ end }}
             </binaries>
         </moduleSet>
+        {{ end }}
     </moduleSets>
 </assembly>
