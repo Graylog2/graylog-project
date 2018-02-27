@@ -149,3 +149,18 @@ $ ./node/npm run start
 ```
 
 The web interface is now reachable via [http://localhost:8080/](http://localhost:8080/).
+
+### Working with Proxy
+
+To be able to run builds in environments that needs proxy settings to access the internet, first run `mvn` with the option to disable proxy by-pass to yarn.
+
+```
+mvn -Dfrontend.yarn.yarnInheritsProxyConfigFromMaven=false
+```
+
+Add the Proxy settings to the users *.yarnrc*:
+
+```
+proxy "https://<user>:<password>@proxy.in.lan:8080"
+https-proxy "https://<user>:<password>@proxy.in.lan:8080"
+```
