@@ -145,6 +145,13 @@ using the following command inside the `graylog2-server/graylog2-web-interface`
 directory.
 
 ```
+$ ./node/yarn/dist/bin/yarn start
+```
+
+If you are running the 2.4 branch or earlier, you have to use npm to start the
+development webserver:
+
+```
 $ ./node/npm run start
 ```
 
