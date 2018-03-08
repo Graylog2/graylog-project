@@ -16,7 +16,7 @@
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-map-widget.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-pipeline-processor.git",
@@ -24,44 +24,44 @@
       "submodules" : [
         {
           "path": "plugin",
-          "assembly": true
+          "assemblies": ["graylog"]
         }
       ]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-enterprise-integration.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-beats.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-aws.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-threatintel.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-netflow.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-cef.git",
       "revision": "2.4",
-      "assembly": true
+      "assemblies": ["graylog"]
     }
   ]
 }

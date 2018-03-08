@@ -16,17 +16,17 @@
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
       "revision": "master",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-aws.git",
       "revision": "master",
-      "assembly": true
+      "assemblies": ["graylog"]
     },
     {
       "repository": "git@github.com:Graylog2/graylog-plugin-threatintel.git",
       "revision": "master",
-      "assembly": true
+      "assemblies": ["graylog"]
     }
   ]
 }
