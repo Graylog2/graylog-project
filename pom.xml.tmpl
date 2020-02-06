@@ -37,6 +37,9 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.site.skip>true</maven.site.skip>
 
+        <!-- Can be used to set a custom suffix for the assembly output -->
+        <assembly.suffix></assembly.suffix>
+
         <!-- to work around filtering bug, which makes maven.build.timestamp inaccessible -->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
     </properties>
@@ -56,23 +59,45 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
+                <inherited>false</inherited>
                 <executions>
+                    {{ if gt (len (index .Assemblies "graylog")) 0 -}}
                     <execution>
                         <id>generate-project-server-artifact</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <finalName>graylog-${project.version}-${maven.build.timestamp}${assembly.suffix}</finalName>
+                            <outputDirectory>${project.build.directory}/server</outputDirectory>
+                            <descriptors>
+                                <descriptor>src/main/assembly/server-tarball.xml</descriptor>
+                            </descriptors>
+                        </configuration>
                     </execution>
+                    {{- end }}
+                    {{ if gt (len (index .Assemblies "graylog-integrations")) 0 -}}
+                    <execution>
+                        <id>generate-project-integrations-artifact</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>graylog-integrations-plugins-${project.version}-${maven.build.timestamp}${assembly.suffix}</finalName>
+                            <outputDirectory>${project.build.directory}/integrations</outputDirectory>
+                            <descriptors>
+                                <descriptor>src/main/assembly/integrations-tarball.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    {{- end }}
                 </executions>
                 <configuration>
                     <attach>false</attach>
                     <appendAssemblyId>false</appendAssemblyId>
                     <ignoreMissingDescriptor>true</ignoreMissingDescriptor>
-                    <finalName>graylog-${project.version}-${maven.build.timestamp}</finalName>
-                    <descriptors>
-                        <descriptor>src/main/assembly/server-tarball.xml</descriptor>
-                    </descriptors>
                 </configuration>
             </plugin>
             <plugin>
@@ -100,9 +125,24 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <finalName>graylog-${project.version}</finalName>
-                        </configuration>
+                        <executions>
+                            {{ if gt (len (index .Assemblies "graylog")) 0 -}}
+                            <execution>
+                                <id>generate-project-server-artifact</id>
+                                <configuration>
+                                    <finalName>graylog-${project.version}</finalName>
+                                </configuration>
+                            </execution>
+                            {{- end }}
+                            {{ if gt (len (index .Assemblies "graylog-integrations")) 0 -}}
+                            <execution>
+                                <id>generate-project-integrations-artifact</id>
+                                <configuration>
+                                    <finalName>graylog-integrations-plugins-${project.version}</finalName>
+                                </configuration>
+                            </execution>
+                            {{- end }}
+                        </executions>
                   </plugin>
                 </plugins>
             </build>
