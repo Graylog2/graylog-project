@@ -10,6 +10,12 @@
         },
         {
           "path": "graylog2-web-interface"
+        },
+	{
+          "path": "graylog-storage-elasticsearch6"
+        },
+        {
+          "path": "distribution"
         }
       ]
     },
