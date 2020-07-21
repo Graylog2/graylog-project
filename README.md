@@ -17,6 +17,7 @@ is used to manage this meta project and is a requirement.
 
 ## Setup
 
+1. be able connect via ssh to github (process described [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), can be tested with `ssh -T git@github.com` ) 
 1. Install the latest version of the graylog-project CLI tool
 1. Bootstrap the graylog-project repository
 1. Import the graylog-project repository into your IDE
