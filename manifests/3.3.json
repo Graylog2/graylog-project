@@ -1,0 +1,37 @@
+{
+  "modules": [
+    {
+      "repository": "git@github.com:Graylog2/graylog2-server.git",
+      "revision": "3.3",
+      "server": true,
+      "submodules": [
+        {
+          "path": "graylog2-server"
+        },
+        {
+          "path": "graylog2-web-interface"
+        }
+      ]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
+      "revision": "3.3",
+      "assemblies": ["graylog"]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-aws.git",
+      "revision": "3.3",
+      "assemblies": ["graylog"]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-threatintel.git",
+      "revision": "3.3",
+      "assemblies": ["graylog"]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-integrations.git",
+      "revision": "3.3",
+      "assemblies": ["graylog-integrations"]
+    }
+  ]
+}
