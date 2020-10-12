@@ -90,6 +90,13 @@ Generating src/main/assembly/server-tarball.xml file from template src/main/asse
 Writing manifest state to .graylog-project-manifest-state
 ```
 
+#### Checking out a particular version
+
+The project contains various manifest files specifying the version of Graylog project repositories to be checked out. The `manifests/master.json` file is used by default. The `--manifest` argument allows you to check out a different version:
+```
+graylog-project bootstrap github://Graylog2/graylog-project.git --manifest manifests/3.3.json
+```
+
 ### IDE Import
 
 Now you can import the `graylog-project` folder into your IDE of choice.
