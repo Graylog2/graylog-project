@@ -5,20 +5,10 @@
     <id>graylog</id>
     <formats>
         <format>tar.gz</format>
+        <format>dir</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
     <moduleSets>
-        <moduleSet>
-            <includes>
-                <include>org.graylog2:graylog2-server</include>
-            </includes>
-            <binaries>
-                <attachmentClassifier>graylog-server-tarball</attachmentClassifier>
-                <includeDependencies>false</includeDependencies>
-                <unpack>true</unpack>
-            </binaries>
-        </moduleSet>
-
         {{ range $assembly := index .Assemblies "graylog" }}
         <moduleSet>
             <includeSubModules>true</includeSubModules>

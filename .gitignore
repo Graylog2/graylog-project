@@ -75,6 +75,7 @@ crashlytics-build.properties
 /pom.xml
 /runner/pom.xml
 /src/main/assembly/server-tarball.xml
+/src/main/assembly/integrations-tarball.xml
 
 # graylog-project CLI files
 /.graylog-project-manifest-state
