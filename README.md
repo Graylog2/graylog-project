@@ -17,7 +17,7 @@ is used to manage this meta project and is a requirement.
 
 ## Setup
 
-1. be able connect via ssh to github (process described [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), can be tested with `ssh -T git@github.com` ) 
+1. be able connect via ssh to github (process described [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), can be tested with `ssh -T git@github.com` )
 1. Install the latest version of the graylog-project CLI tool
 1. Bootstrap the graylog-project repository
 1. Import the graylog-project repository into your IDE
@@ -138,8 +138,16 @@ This will build the backend and frontend parts.
 ### Elasticsearch & MongoDB
 
 Before you start the server, make sure you have an Elasticsearch and MongoDB
-service running and the `graylog.conf` contains the correct connection
-details for both.
+service running. If you're just testing this out and you don't care about persistent data, you can run:
+
+```
+sudo sysctl -w vm.max_map_count=262144
+docker run -d -p 27017:27017 --name mongo mongo:latest
+docker run -d -p 9200:9200 -p 9300:9300 elasticsearch:7.10.2
+```
+
+Make sure that `graylog.conf` contains the correct connection details for Elasticsearch and MongoDB.
+
 
 ### Server Start
 
