@@ -133,6 +133,13 @@ $ mvn compile
 
 This will build the backend and frontend parts.
 
+For a faster compile, you can skip building the frontend, building javadocs, and running tests:
+
+```
+mvn -Dmaven.javadoc.skip=true -DskipTests -Dskip.web.build compile
+```
+
+
 ## Usage
 
 ### Elasticsearch & MongoDB
