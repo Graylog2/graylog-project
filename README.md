@@ -97,9 +97,9 @@ The project contains various manifest files specifying the version of Graylog pr
 graylog-project bootstrap github://Graylog2/graylog-project.git --manifest manifests/4.2.json
 ```
 
-The `X.Y.json` manifests will checkout the current code from that branch in Github. The resulting artifact will be an X.Y-SNAPSHOT version.
+The `X.Y.json` manifests will checkout the current code from that branch in Github. The resulting artifact will be an `X.Y-SNAPSHOT` version.
 
-The `release-X.Y.Z.json` manifests will checkout the code for that exact version of Graylog. So, the resulting artifact will be an X.Y.Z version.
+The `release-X.Y.Z.json` manifests will checkout the code for that exact version of Graylog. So, the resulting artifact will be an `X.Y.Z` version.
 
 ### IDE Import
 
