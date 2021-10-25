@@ -94,7 +94,7 @@ Writing manifest state to .graylog-project-manifest-state
 
 The project contains various manifest files specifying the version of Graylog project repositories to be checked out. The `manifests/master.json` file is used by default. The `--manifest` argument allows you to check out a different version:
 ```
-graylog-project bootstrap github://Graylog2/graylog-project.git --manifest manifests/3.3.json
+graylog-project bootstrap github://Graylog2/graylog-project.git --manifest manifests/4.2.json
 ```
 
 ### IDE Import
