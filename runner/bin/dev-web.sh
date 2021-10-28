@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+. "$(dirname $0)/include.sh"
+
+# Starts only the web interface
+exec docker-compose \
+	-f "${docker_root}/docker-compose.yml" \
+	up --abort-on-container-exit $compose_up_opts \
+	web

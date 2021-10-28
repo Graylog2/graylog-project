@@ -1,0 +1,185 @@
+version: "3.7"
+
+x-common-labels:
+  &common-labels
+  org.graylog.project.root: "${PROJECT_ROOT:?Missing PROJECT_ROOT in environment}"
+
+x-common-logging:
+  &common-logging
+  driver: "${SERVICE_LOGGER:-json-file}"
+  options:
+    max-size: "50m"
+    max-file: "10"
+
+networks:
+  default:
+    labels:
+      org.graylog.project.root: "${PROJECT_ROOT:?Missing PROJECT_ROOT in environment}"
+
+services:
+  graylog:
+    build:
+      context: "images/dev-server-runner"
+
+    depends_on:
+      - "mongodb"
+      - "elasticsearch"
+      - "mailserver"
+
+    environment:
+      # Pass the following variables to the container
+      GRAYLOG_BUILD_SKIP_WEB: "${GRAYLOG_BUILD_SKIP_WEB:-true}"
+      GRAYLOG_BUILD_CLEAN: "${GRAYLOG_BUILD_CLEAN:-false}"
+
+      # Defaults:
+      GRAYLOG_MONGODB_URI: "mongodb://mongodb/graylog"
+      GRAYLOG_ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      GRAYLOG_HTTP_BIND_ADDRESS: "0.0.0.0:9000"
+      GRAYLOG_HTTP_PUBLISH_URI: "http://localhost:${GRAYLOG_API_HTTP_PORT:-9000}/"
+      GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:${GRAYLOG_API_HTTP_PORT:-9000}/"
+      GRAYLOG_HTTP_ENABLE_CORS: "true"
+      GRAYLOG_LB_RECOGNITION_PERIOD_SECONDS: "0"
+      GRAYLOG_VERSIONCHECKS: "false"
+      GRAYLOG_DATA_DIR: "/data/node-01"
+      GRAYLOG_PLUGIN_DIR: "/graylog/graylog-project/runner/plugins"
+      GRAYLOG_MESSAGE_JOURNAL_DIR: "/data/node-01/journal"
+      GRAYLOG_NODE_ID_FILE: "/data/node-01/node-id"
+      GRAYLOG_TRANSPORT_EMAIL_ENABLED: "true"
+      GRAYLOG_TRANSPORT_EMAIL_HOSTNAME: "mailserver"
+      GRAYLOG_TRANSPORT_EMAIL_PORT: "1025"
+      GRAYLOG_TRANSPORT_EMAIL_USE_AUTH: "false"
+      GRAYLOG_TRANSPORT_EMAIL_WEB_INTERFACE_URL: "http://localhost:${GRAYLOG_API_HTTP_PORT:-9000}/"
+      GRAYLOG_TRANSPORT_EMAIL_FROM_EMAIL: "graylog-dev-server@localhost"
+      # To make reporting (headless_shell) work inside a Docker container
+      GRAYLOG_REPORT_DISABLE_SANDBOX: "true"
+      # Put the server in development mode so it doesn't complain about missing
+      # production web assets on startup.
+      DEVELOPMENT: "true"
+      DEBUG: "${DEBUG:-}"
+      # Cache npm packages when building the web interface
+      YARN_CACHE_FOLDER: "${YARN_CACHE_FOLDER:-/cache/yarn}"
+
+    hostname: "graylog-dev-server"
+
+    # This needs to be bumped after changes to images/dev-web-runner to make
+    # sure docker-compose will automatically rebuild the image.
+    image: "graylog/dev-server-runner:1"
+
+    init: true # To make sure we reap child processs (e.g. headless_shell)
+
+    labels:
+      org.graylog.project.root: "${PROJECT_ROOT:?Missing PROJECT_ROOT in environment}"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "10"
+
+    ports:
+      - "${GRAYLOG_API_HTTP_PORT:-9000}:9000"
+      - "127.0.0.1:5005:5005/tcp"   # IDE debugging
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:2055:2055/udp"   # NetFlow
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:5044:4739/udp"   # IPFIX
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:5044:5044/tcp"   # Beats
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:5140:5140/udp"   # Syslog UDP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:5140:5140/tcp"   # Syslog TCP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:5555:5555/udp"   # Raw UDP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:5555:5555/tcp"   # Raw TCP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:12201:12201/udp" # GELF UDP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:12201:12201/tcp" # GELF TCP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13001:13001/udp" # Custom 1 UDP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13002:13002/udp" # Custom 2 UDP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13003:13003/udp" # Custom 3 UDP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13004:13004/udp" # Custom 4 UDP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13001:13001/tcp" # Custom 1 TCP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13002:13002/tcp" # Custom 2 TCP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13003:13003/tcp" # Custom 3 TCP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13004:13004/tcp" # Custom 4 TCP
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13301:13301/tcp" # Cloud Forwarder messages
+      - "${GRAYLOG_INPUT_LISTEN_IP:-127.0.0.1}:13302:13302/tcp" # Cloud Forwarder configuration
+
+    volumes:
+      - "${PROJECT_ROOT:?Missing PROJECT_ROOT in environment}:/graylog/graylog-project"
+      - "${PROJECT_REPOS_ROOT:?Missing PROJECT_REPOS_ROOT in environment}:/graylog/graylog-project-repos"
+      - "${PROJECT_DATA_ROOT:?Missing PROJECT_DATA_ROOT in environment}:/data"
+      - "$HOME/.m2/repository:/cache/maven"
+      - "cache:/cache"
+
+  mongodb:
+    image: "mongo:${MONGODB_VERSION:-5.0}"
+    labels: *common-labels
+    logging: *common-logging
+    ports:
+      - "127.0.0.1:${MONGODB_PORT:-27017}:27017"
+    volumes:
+      - "${MONGODB_CONFIG_VOLUME:-mongodbconfig}:/data/configdb"
+      - "${MONGODB_DATA_VOLUME:-mongodb}:/data/db"
+
+  elasticsearch:
+    command:
+      - "elasticsearch"
+      - "-E"
+      - "discovery.type=single-node"
+      - "-E"
+      - "logger.deprecation.level=warn"
+      - "-E"
+      - "action.auto_create_index=false"
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    image: "${ELASTICSEARCH_IMAGE_NAME:-docker.elastic.co/elasticsearch/elasticsearch-oss}:${ELASTICSEARCH_VERSION:-7.10.2}"
+    labels: *common-labels
+    logging: *common-logging
+    ports:
+      - "127.0.0.1:${ELASTICSEARCH_PORT:-9200}:9200"
+    volumes:
+      - "${ELASTICSEARCH_DATA_VOLUME:-elasticsearch}:/usr/share/elasticsearch/data"
+
+  mailserver:
+    environment:
+      MH_STORAGE: "memory"
+      MH_SMTP_BIND_ADDR: "0.0.0.0:1025"
+    image: "mailhog/mailhog:${MAILHOG_VERSION:-latest}"
+    labels: *common-labels
+    logging: *common-logging
+    ports:
+      - "127.0.0.1:${MAILHOG_PORT:-8025}:8025"
+
+  web:
+    build:
+      context: "images/dev-web-runner"
+
+    environment:
+      YARN_CACHE_FOLDER: "${YARN_CACHE_FOLDER:-/cache/yarn}"
+
+    # This needs to be bumped after changes to images/dev-web-runner to make
+    # sure docker-compose will automatically rebuild the image.
+    image: "graylog/dev-web-runner:1"
+
+    init: true # To make sure we reap child processs
+
+    labels: *common-labels
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "10"
+
+    ports:
+      - "127.0.0.1:${GRAYLOG_WEB_HTTP_PORT:-8080}:8080"
+
+    volumes:
+      - "${PROJECT_ROOT:?Missing PROJECT_ROOT in environment}:/graylog/graylog-project"
+      - "${PROJECT_REPOS_ROOT:?Missing PROJECT_REPOS_ROOT in environment}:/graylog/graylog-project-repos"
+      - "cache:/cache"
+
+volumes:
+  mongodbconfig:
+    labels: *common-labels
+  mongodb:
+    labels: *common-labels
+  elasticsearch:
+    labels: *common-labels
+  cache:
+    labels: *common-labels
