@@ -154,7 +154,7 @@ service running. If you're just testing this out and you don't care about persis
 ```
 sudo sysctl -w vm.max_map_count=262144
 docker run -d -p 27017:27017 --name mongo mongo:latest
-docker run -d -p 9200:9200 -p 9300:9300 elasticsearch:7.17.6
+docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.17.6
 ```
 
 Make sure that `graylog.conf` contains the correct connection details for Elasticsearch and MongoDB.
