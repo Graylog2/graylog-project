@@ -9,7 +9,7 @@ RUN curl -sL -o /usr/bin/graylog-project https://github.com/Graylog2/graylog-pro
 
 
 # Final layer
-FROM maven:3.6-jdk-8
+FROM maven:3.6-openjdk-17
 
 COPY --from=build /usr/sbin/gosu /usr/sbin/gosu
 COPY --from=build /usr/bin/uuidgen /usr/bin/uuidgen
