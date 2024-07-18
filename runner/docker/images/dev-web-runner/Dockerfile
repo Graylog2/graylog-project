@@ -1,10 +1,10 @@
 # Build layer
 FROM debian:buster-slim AS build
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install --no-install-recommends --assume-yes 'gosu=1.10-*' curl ca-certificates
-RUN curl -sL -o /usr/bin/graylog-project https://github.com/Graylog2/graylog-project-cli/releases/download/0.26.0/graylog-project.linux && \
+RUN curl -sL -o /usr/bin/graylog-project https://github.com/Graylog2/graylog-project-cli/releases/latest/download/graylog-project.linux && \
       chmod +x /usr/bin/graylog-project
 
 
