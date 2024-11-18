@@ -3,7 +3,7 @@
   "modules": [
     {
       "repository": "git@github.com:Graylog2/graylog2-server.git",
-      "revision": "master",
+      "revision": "6.1",
       "server": true,
       "submodules": [
         {

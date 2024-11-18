@@ -3,7 +3,7 @@
   "modules": [
     {
       "repository": "git@github.com:Graylog2/graylog2-server.git",
-      "revision": "master",
+      "revision": "5.1",
       "server": true,
       "submodules": [
         {
@@ -29,6 +29,21 @@
           "assembly_attachment": "datanode-tarball"
         }
       ]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
+      "revision": "5.1",
+      "assemblies": ["graylog"]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-aws.git",
+      "revision": "5.1",
+      "assemblies": ["graylog"]
+    },
+    {
+      "repository": "git@github.com:Graylog2/graylog-plugin-integrations.git",
+      "revision": "5.1",
+      "assemblies": ["graylog"]
     }
   ]
 }

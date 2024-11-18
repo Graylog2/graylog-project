@@ -4,7 +4,10 @@ set -e
 
 . "$(dirname $0)/include.sh"
 
+SEARCH_BACKEND="${SEARCH_BACKEND:-elasticsearch}"
+
 # Runs docker-compose down to remove all containers
-exec docker-compose \
+exec docker compose \
 	-f "${docker_root}/docker-compose.yml" \
-	down $compose_down_opts
+	--profile "$SEARCH_BACKEND" \
+	down --remove-orphans $compose_down_opts

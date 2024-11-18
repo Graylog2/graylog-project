@@ -19,16 +19,14 @@
     <modules>
         <module>runner</module>
 
-        {{ range $module := .Modules -}}
+        {{- range $module := .Modules }}
         <module>{{ .RelativePath }}</module>
-        {{ end }}
+        {{- end }}
     </modules>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.useIncrementalCompilation>false</maven.compiler.useIncrementalCompilation>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.source.skip>true</maven.source.skip>
@@ -44,51 +42,49 @@
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Ensure consistent dependency versions by importing the entries
+                 from <dependencyManagement/> in graylog-parent. -->
+            <dependency>
+                <groupId>org.graylog</groupId>
+                <artifactId>graylog-parent</artifactId>
+                <version>{{ .Server.Version }}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        {{ range $dependency := .Dependencies -}}
+        {{- range $dependency := .Dependencies }}
         <dependency>
             <groupId>{{ $dependency.GroupId }}</groupId>
             <artifactId>{{ $dependency.ArtifactId }}</artifactId>
             <version>{{ $dependency.Version }}</version>
         </dependency>
-        {{ end }}
+        {{- end }}
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.7.1</version>
                 <inherited>false</inherited>
                 <executions>
-                    {{ if gt (len (index .Assemblies "graylog")) 0 -}}
+                    {{- range $name, $data := .Assemblies }}
                     <execution>
-                        <id>generate-project-server-artifact</id>
+                        <id>generate-{{ $name }}-artifact</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>graylog-${project.version}-${maven.build.timestamp}${assembly.suffix}</finalName>
-                            <outputDirectory>${project.build.directory}/server</outputDirectory>
+                            <finalName>{{ $name }}-${project.version}-${maven.build.timestamp}${assembly.suffix}</finalName>
+                            <outputDirectory>${project.build.directory}/artifacts/{{ $name }}</outputDirectory>
                             <descriptors>
-                                <descriptor>src/main/assembly/server-tarball.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                    {{- end }}
-                    {{ if gt (len (index .Assemblies "graylog-integrations")) 0 -}}
-                    <execution>
-                        <id>generate-project-integrations-artifact</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>graylog-integrations-plugins-${project.version}-${maven.build.timestamp}${assembly.suffix}</finalName>
-                            <outputDirectory>${project.build.directory}/integrations</outputDirectory>
-                            <descriptors>
-                                <descriptor>src/main/assembly/integrations-tarball.xml</descriptor>
+                                <descriptor>src/main/assembly/{{ $name }}.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
@@ -98,12 +94,13 @@
                     <attach>false</attach>
                     <appendAssemblyId>false</appendAssemblyId>
                     <ignoreMissingDescriptor>true</ignoreMissingDescriptor>
+                    <tarLongFileMode>gnu</tarLongFileMode>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>2.11</version>
+                <version>4.5</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
@@ -126,24 +123,16 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <executions>
-                            {{ if gt (len (index .Assemblies "graylog")) 0 -}}
+                            {{- range $name, $data := .Assemblies }}
                             <execution>
-                                <id>generate-project-server-artifact</id>
+                                <id>generate-{{ $name }}-artifact</id>
                                 <configuration>
-                                    <finalName>graylog-${project.version}</finalName>
-                                </configuration>
-                            </execution>
-                            {{- end }}
-                            {{ if gt (len (index .Assemblies "graylog-integrations")) 0 -}}
-                            <execution>
-                                <id>generate-project-integrations-artifact</id>
-                                <configuration>
-                                    <finalName>graylog-integrations-plugins-${project.version}</finalName>
+                                    <finalName>{{ $name }}-${project.version}</finalName>
                                 </configuration>
                             </execution>
                             {{- end }}
                         </executions>
-                  </plugin>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

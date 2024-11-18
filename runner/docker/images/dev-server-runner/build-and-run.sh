@@ -17,6 +17,12 @@ if [ -n "$DEBUG" ]; then
 	graylog-project exec "ls -l"
 fi
 
+# Detect if we have to use Java 8
+if grep -q maven.compiler.source.1.8 /graylog/graylog-project-repos/graylog2-server/pom.xml; then
+	echo "===> Using Java 8"
+	export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-$(dpkg --print-architecture)"
+fi
+
 goals=""
 if [ "$GRAYLOG_BUILD_CLEAN" = "true" ]; then
 	echo "===> Cleaning up"
@@ -31,9 +37,16 @@ else
 	unset DEVELOPMENT
 fi
 
+# Detect if we can use the maven wrapper
+if [ -f ./mvnw ]; then
+	mvn=./mvnw
+else
+	mvn=mvn
+fi
+
 echo "===> Running build"
 # Build and generate classpath file: (we use the test goal even though we skip tests to avoid a test-jar error)
-mvn $flags \
+$mvn $flags \
 	-s /graylog/maven-settings.xml \
 	-Dmaven.javadoc.skip=true \
 	-DskipTests \
@@ -41,7 +54,7 @@ mvn $flags \
 	-DincludeScope=runtime \
 	-Dmdep.outputFile=target/classpath.txt \
 	$goals test \
-	org.apache.maven.plugins:maven-dependency-plugin:3.1.2:build-classpath
+	org.apache.maven.plugins:maven-dependency-plugin:3.2.0:build-classpath
 
 
 mkdir -p $(dirname "$GRAYLOG_NODE_ID_FILE")
@@ -64,11 +77,19 @@ if [ ! -f "/data/graylog.conf" ]; then
 	__CONFIG
 fi
 
+if [ ! -f "/data/feature-flags.config" ]; then
+	echo "===> Creating /data/feature-flags.config"
+
+	cat <<-__FEATUREFLAGS > /data/feature-flags.config
+	# Add custom feature flags in Java properties syntax
+	__FEATUREFLAGS
+fi
+
 echo "===> Running graylog server"
 classpath=$(< runner/target/classpath.txt)
 exec java \
-	-Djava.library.path=/graylog/graylog-project-repos/graylog2-server/lib/sigar-1.6.4 \
 	-Dio.netty.leakDetection.level=paranoid \
+	-Dlog4j2.formatMsgNoLookups=true \
 	-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005 \
 	-Xms1g \
 	-Xmx1g \
@@ -76,4 +97,4 @@ exec java \
 	-XX:-OmitStackTraceInFastThrow \
 	-classpath "$classpath" \
 	org.graylog2.bootstrap.Main \
-	server -f /data/graylog.conf -np --local
+	server -f /data/graylog.conf -np --local -ff /data/feature-flags.config

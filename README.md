@@ -8,7 +8,7 @@ Graylog consists of the core [server](https://github.com/Graylog2/graylog2-serve
 project and several plugins (e.g. the [collector plugin](https://github.com/Graylog2/graylog-plugin-collector))
 which are all separate [maven](https://maven.apache.org/) projects.
 
-To make it possible to build all of those project with a single `mvn package`
+To make it possible to build all of those project with a single `./mvnw package`
 command, we built this meta project which pulls in the core server and all
 plugins into a single maven reactor.
 
@@ -17,7 +17,7 @@ is used to manage this meta project and is a requirement.
 
 ## Setup
 
-1. be able connect via ssh to github (process described [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent), can be tested with `ssh -T git@github.com` )
+1. Ensure GitHub SSH access (process described [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent); can be tested with `ssh -T git@github.com`)
 1. Install the latest version of the graylog-project CLI tool
 1. Bootstrap the graylog-project repository
 1. Import the graylog-project repository into your IDE
@@ -84,9 +84,9 @@ Checkout revision: master
 
 [...]
 
-Generating pom.xml file from template pom.xml.tmpl
-Generating runner/pom.xml file from template runner/pom.xml.tmpl
-Generating src/main/assembly/server-tarball.xml file from template src/main/assembly/server-tarball.xml.tmpl
+Generating pom.xml file from template pom.xml-tmpl
+Generating runner/pom.xml file from template runner/pom.xml-tmpl
+Generating src/main/assembly/server-tarball.xml file from template src/main/assembly/server-tarball.xml-tmpl
 Writing manifest state to .graylog-project-manifest-state
 ```
 
@@ -98,8 +98,6 @@ graylog-project bootstrap github://Graylog2/graylog-project.git --manifest manif
 ```
 
 The `X.Y.json` manifests will checkout the current code from that branch in Github. The resulting build artifact will be an `X.Y-SNAPSHOT` version.
-
-The `release-X.Y.Z.json` manifests will checkout the code for that exact version of Graylog. So, the resulting build artifact will be an `X.Y.Z` version.
 
 ### IDE Import
 
@@ -132,7 +130,7 @@ Before you can run the server from the IDE, you have to run an initial build
 to create some assets.
 
 ```
-$ mvn compile
+$ ./mvnw compile
 ```
 
 This will build the backend and frontend parts.
@@ -140,7 +138,7 @@ This will build the backend and frontend parts.
 For a faster compile, you can skip building the frontend, building javadocs, and running tests:
 
 ```
-mvn -Dmaven.javadoc.skip=true -DskipTests -Dskip.web.build compile
+./mvnw -Dmaven.javadoc.skip=true -DskipTests -Dskip.web.build compile
 ```
 
 
@@ -189,7 +187,7 @@ The web interface is now reachable via [http://localhost:8080/](http://localhost
 To be able to run builds in environments that needs proxy settings to access the internet, first run `mvn` with the option to disable proxy by-pass to yarn.
 
 ```
-mvn -Dfrontend.yarn.yarnInheritsProxyConfigFromMaven=false
+./mvnw -Dfrontend.yarn.yarnInheritsProxyConfigFromMaven=false
 ```
 
 Add the Proxy settings to the users *.yarnrc*:

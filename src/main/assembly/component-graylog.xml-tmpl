@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The common parts for the architecture dependent assemblies are defined in here. -->
+<component xmlns="http://maven.apache.org/ASSEMBLY-COMPONENT/2.1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://maven.apache.org/ASSEMBLY-COMPONENT/2.1.1 https://maven.apache.org/xsd/assembly-component-2.1.1.xsd">
+    <moduleSets>
+        {{- range $assembly := index .Assemblies "graylog" }}
+        <moduleSet>
+            <includeSubModules>true</includeSubModules>
+            <includes>
+                <include>{{ $assembly }}</include>
+            </includes>
+            <binaries>
+            {{- if $assembly.Attachment }}
+                <attachmentClassifier>{{ $assembly.Attachment }}</attachmentClassifier>
+                <includeDependencies>false</includeDependencies>
+                <unpack>true</unpack>
+                <unpackOptions>
+                    <excludes>
+                        <exclude>sbom/**</exclude>
+                    </excludes>
+                </unpackOptions>
+            {{- else }}
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>plugin</outputDirectory>
+                <unpack>false</unpack>
+            {{- end }}
+            </binaries>
+        </moduleSet>
+        {{- end }}
+    </moduleSets>
+</component>
