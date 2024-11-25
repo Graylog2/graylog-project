@@ -1,12 +1,8 @@
 {
-  "default_apply": {
-    "from_revision": "3.3",
-    "new_version": "3.3.15-SNAPSHOT"
-  },
   "modules": [
     {
       "repository": "git@github.com:Graylog2/graylog2-server.git",
-      "revision": "3.3.14",
+      "revision": "4.3",
       "server": true,
       "submodules": [
         {
@@ -14,36 +10,39 @@
         },
         {
           "path": "graylog2-web-interface"
+        },
+        {
+          "path": "graylog-storage-elasticsearch6"
+        },
+        {
+          "path": "graylog-storage-elasticsearch7"
+        },
+        {
+          "path": "distribution",
+          "assemblies": ["graylog"],
+          "assembly_attachment": "graylog-server-tarball"
         }
       ]
     },
     {
-      "assemblies": [
-        "graylog"
-      ],
       "repository": "git@github.com:Graylog2/graylog-plugin-collector.git",
-      "revision": "3.3.14"
+      "revision": "4.3",
+      "assemblies": ["graylog"]
     },
     {
-      "assemblies": [
-        "graylog"
-      ],
       "repository": "git@github.com:Graylog2/graylog-plugin-aws.git",
-      "revision": "3.3.14"
+      "revision": "4.3",
+      "assemblies": ["graylog"]
     },
     {
-      "assemblies": [
-        "graylog"
-      ],
       "repository": "git@github.com:Graylog2/graylog-plugin-threatintel.git",
-      "revision": "3.3.14"
+      "revision": "4.3",
+      "assemblies": ["graylog"]
     },
     {
-      "assemblies": [
-        "graylog-integrations"
-      ],
       "repository": "git@github.com:Graylog2/graylog-plugin-integrations.git",
-      "revision": "3.3.14"
+      "revision": "4.3",
+      "assemblies": ["graylog-integrations-plugins"]
     }
   ]
 }

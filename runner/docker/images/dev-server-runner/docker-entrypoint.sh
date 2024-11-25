@@ -42,13 +42,21 @@ group="nogroup"
 uid=$(stat -c "%u" "$canary_file")
 gid=$(stat -c "%g" "$canary_file")
 
-# Adjust uid and gid of user and group to match the canary permissions
-if ! getent group $gid >/dev/null; then
+# Adjust uid and gid of user and group to match the canary permissions.
+# If a user for the uid and gid already exists, use that user instead of
+# the default user.
+if getent group $gid >/dev/null; then
+	group="$(getent group "$gid" | cut -d : -f 1)"
+else
 	groupmod -g "$gid" "$group"
 fi
-if ! getent passwd $uid >/dev/null; then
+if getent passwd $uid >/dev/null; then
+	user="$(getent passwd "$uid" | cut -d : -f 1)"
+else
 	usermod -u "$uid" -g "$gid" -d "/graylog" "$user" >/dev/null
 fi
+
+echo "==> Using user \"${user}:${group}\" (${uid}:${gid})"
 
 chown -R ${uid}:${gid} /cache /data
 

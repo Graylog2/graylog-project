@@ -7,11 +7,15 @@ set -e
 # Disable logging for all services but Graylog
 export SERVICE_LOGGER="${SERVICE_LOGGER:-none}"
 
+SEARCH_BACKEND="${SEARCH_BACKEND:-elasticsearch}"
+
 # Starts the server + all services
-exec docker-compose \
+exec docker compose \
 	-f "${docker_root}/docker-compose.yml" \
+	--profile "$SEARCH_BACKEND" \
 	up --abort-on-container-exit $compose_up_opts \
 	mongodb \
-	elasticsearch \
+	"$SEARCH_BACKEND" \
+	"${SEARCH_BACKEND}-monitor" \
 	mailserver \
 	graylog

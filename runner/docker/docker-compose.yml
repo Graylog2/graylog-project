@@ -1,5 +1,3 @@
-version: "3.7"
-
 x-common-labels:
   &common-labels
   org.graylog.project.root: "${PROJECT_ROOT:?Missing PROJECT_ROOT in environment}"
@@ -23,7 +21,8 @@ services:
 
     depends_on:
       - "mongodb"
-      - "elasticsearch"
+      - "${SEARCH_BACKEND:-elasticsearch}"
+      - "${SEARCH_BACKEND:-elasticsearch}-monitor"
       - "mailserver"
 
     environment:
@@ -33,13 +32,14 @@ services:
 
       # Defaults:
       GRAYLOG_MONGODB_URI: "mongodb://mongodb/graylog"
-      GRAYLOG_ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      GRAYLOG_ELASTICSEARCH_HOSTS: "http://${SEARCH_BACKEND:-elasticsearch}:9200"
       GRAYLOG_HTTP_BIND_ADDRESS: "0.0.0.0:9000"
       GRAYLOG_HTTP_PUBLISH_URI: "http://localhost:${GRAYLOG_API_HTTP_PORT:-9000}/"
       GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:${GRAYLOG_API_HTTP_PORT:-9000}/"
       GRAYLOG_HTTP_ENABLE_CORS: "true"
       GRAYLOG_LB_RECOGNITION_PERIOD_SECONDS: "0"
       GRAYLOG_VERSIONCHECKS: "false"
+      GRAYLOG_TELEMETRY_ENABLED: "false"
       GRAYLOG_DATA_DIR: "/data/node-01"
       GRAYLOG_PLUGIN_DIR: "/graylog/graylog-project/runner/plugins"
       GRAYLOG_MESSAGE_JOURNAL_DIR: "/data/node-01/journal"
@@ -59,11 +59,11 @@ services:
       # Cache npm packages when building the web interface
       YARN_CACHE_FOLDER: "${YARN_CACHE_FOLDER:-/cache/yarn}"
 
-    hostname: "graylog-dev-server"
-
-    # This needs to be bumped after changes to images/dev-web-runner to make
+    # This needs to be bumped after changes to images/dev-server-runner to make
     # sure docker-compose will automatically rebuild the image.
-    image: "graylog/dev-server-runner:1"
+    image: "graylog/dev-server-runner:11"
+
+    hostname: "graylog-dev-server"
 
     init: true # To make sure we reap child processs (e.g. headless_shell)
 
@@ -104,10 +104,11 @@ services:
       - "${PROJECT_REPOS_ROOT:?Missing PROJECT_REPOS_ROOT in environment}:/graylog/graylog-project-repos"
       - "${PROJECT_DATA_ROOT:?Missing PROJECT_DATA_ROOT in environment}:/data"
       - "$HOME/.m2/repository:/cache/maven"
+      - "$HOME/.m2/wrapper:/graylog/.m2/wrapper"
       - "cache:/cache"
 
   mongodb:
-    image: "mongo:${MONGODB_VERSION:-5.0}"
+    image: "mongo:${MONGODB_VERSION:-7.0}"
     labels: *common-labels
     logging: *common-logging
     ports:
@@ -117,23 +118,70 @@ services:
       - "${MONGODB_DATA_VOLUME:-mongodb}:/data/db"
 
   elasticsearch:
-    command:
-      - "elasticsearch"
-      - "-E"
-      - "discovery.type=single-node"
-      - "-E"
-      - "logger.deprecation.level=warn"
-      - "-E"
-      - "action.auto_create_index=false"
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m -Dlog4j2.formatMsgNoLookups=true"
+      - "discovery.type=single-node"
+      - "logger.deprecation.level=warn"
+      - "action.auto_create_index=false"
     image: "${ELASTICSEARCH_IMAGE_NAME:-docker.elastic.co/elasticsearch/elasticsearch-oss}:${ELASTICSEARCH_VERSION:-7.10.2}"
     labels: *common-labels
     logging: *common-logging
     ports:
       - "127.0.0.1:${ELASTICSEARCH_PORT:-9200}:9200"
+    profiles:
+      - "elasticsearch"
     volumes:
       - "${ELASTICSEARCH_DATA_VOLUME:-elasticsearch}:/usr/share/elasticsearch/data"
+
+  elasticsearch-monitor:
+    environment:
+      - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200/"
+    image: "${KIBANA_IMAGE_NAME:-docker.elastic.co/kibana/kibana-oss}:${ELASTICSEARCH_VERSION:-7.10.2}"
+    labels: *common-labels
+    logging: *common-logging
+    ports:
+      - "127.0.0.1:${KIBANA_PORT:-5601}:5601"
+    profiles:
+      - "elasticsearch"
+
+  opensearch:
+    environment:
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node"
+      - "action.auto_create_index=false"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true" # disables execution of install_demo_configuration.sh bundled with security plugin, which installs demo certificates and security configurations to OpenSearch
+      - "DISABLE_SECURITY_PLUGIN=true" # disables security plugin entirely in OpenSearch by setting plugins.security.disabled: true in opensearch.yml
+      - "bootstrap.memory_lock=true" # along with the memlock settings below, disables swapping
+      - "node.name=opensearch-node"
+    image: "opensearchproject/opensearch:${OPENSEARCH_VERSION:-1.3.13}"
+    labels: *common-labels
+    logging: *common-logging
+    ports:
+      - "127.0.0.1:${ELASTICSEARCH_PORT:-9200}:9200"
+      - "127.0.0.1:9600:9600" # required for Performance Analyzer
+    profiles:
+      - "opensearch"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - "${OPENSEARCH_DATA_VOLUME:-opensearch}:/usr/share/opensearch/data"
+
+  opensearch-monitor:
+    environment:
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
+      - 'OPENSEARCH_HOSTS=["http://opensearch:${ELASTICSEARCH_PORT:-9200}"]' # must be a string with no spaces when specified as an environment variable
+    image: "opensearchproject/opensearch-dashboards:${OPENSEARCH_VERSION:-1.3.13}"
+    labels: *common-labels
+    logging: *common-logging
+    ports:
+      - "127.0.0.1:5601:5601"
+    profiles:
+      - "opensearch"
 
   mailserver:
     environment:
@@ -151,10 +199,11 @@ services:
 
     environment:
       YARN_CACHE_FOLDER: "${YARN_CACHE_FOLDER:-/cache/yarn}"
+      GRAYLOG_BUILD_CLEAN: "${GRAYLOG_BUILD_CLEAN:-false}"
 
     # This needs to be bumped after changes to images/dev-web-runner to make
     # sure docker-compose will automatically rebuild the image.
-    image: "graylog/dev-web-runner:1"
+    image: "graylog/dev-web-runner:7"
 
     init: true # To make sure we reap child processs
 
@@ -180,6 +229,8 @@ volumes:
   mongodb:
     labels: *common-labels
   elasticsearch:
+    labels: *common-labels
+  opensearch:
     labels: *common-labels
   cache:
     labels: *common-labels

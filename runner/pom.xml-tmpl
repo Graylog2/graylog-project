@@ -24,6 +24,13 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.graylog.repackaged</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <skipAssembly>true</skipAssembly>

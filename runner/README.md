@@ -4,13 +4,15 @@ Run Graylog Development Server
 This Graylog development setup provides the following services as Docker
 containers:
 
-- Graylog server (http://localhost:9000/)
+- Graylog server ([http://localhost:9000/](http://localhost:9000/))
   - Builds the server from the checked out sources
   - Pre-configured for email sending to the MailHog service
   - Default "admin" password is `admin`
 - MongoDB (default: `127.0.0.1:27017`)
-- Elasticsearch (default: http://localhost:9200/)
-- [MailHog](https://github.com/mailhog/MailHog) (default: http://localhost:8025/)
+- Elasticsearch (default: [http://localhost:9200/](http://localhost:9200/))
+  - OpenSearch when `SEARCH_BACKEND` is set to `opensearch`
+- [Kibana](https://www.elastic.co/kibana/) (default: [http://localhost:5601/](http://localhost:5601/))
+- [MailHog](https://github.com/mailhog/MailHog) (default: [http://localhost:8025/](http://localhost:8025/))
 
 The `runner/data` directory is mounted as `/data` in the Graylog server container
 and can be used to make files available to the server.
@@ -46,6 +48,8 @@ Make sure you have the following software installed and ready to use:
 
 - [Docker](https://www.docker.com/get-started)
 - [docker-compose](https://docs.docker.com/compose/install/)
+- [nodejs](https://nodejs.org/)
+- [yarn](https://classic.yarnpkg.com/) (use version 1.x!)
 - macOS:
   - `realpath` program from coreutils (`brew install coreutils`)
 
@@ -54,6 +58,15 @@ Make sure you have the following software installed and ready to use:
 ```sh
 cd /path/to/graylog-project
 
+graylog-project run dev
+```
+
+## Run Development Server + OpenSearch and MongoDB
+
+```sh
+cd /path/to/graylog-project
+
+export SEARCH_BACKEND=opensearch
 graylog-project run dev
 ```
 
@@ -124,6 +137,18 @@ cd /path/to/graylog-project
 graylog-project run dev:web
 ```
 
+## Custom Environment Configuration
+
+It's possible to override or set new environment variables for the Docker Compose
+services by creating a `runner/docker/.env` file. That file is automatically
+loaded by Docker Compose.
+
+Example:
+
+```
+echo "GRAYLOG_API_HTTP_PORT=9009" | tee -a runner/docker/.env
+```
+
 ## Custom Server Configuration
 
 After the first development server start, there will be a `runner/data/graylog.conf`
@@ -141,6 +166,7 @@ effect in the `runner/data/graylog.conf` file:
 - `mongodb_uri`
 - `node_id_file`
 - `report_disable_sandbox`
+- `telemetry_enabled`
 - `transport_email_enabled`
 - `transport_email_hostname`
 - `transport_email_port`
